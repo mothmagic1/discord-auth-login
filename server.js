@@ -1,32 +1,17 @@
 const express = require('express');
 const axios = require('axios');
 const session = require('express-session');
-const SQLiteStore = require('connect-sqlite3')(session);
 const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
-const fs = require('fs');
-fs.access('/tmp', fs.constants.W_OK, (err) => {
-    if (err) {
-        console.log("/tmp is not writable", err);
-    } else {
-        console.log("/tmp is writable");
-    }
-});
 
 app.use(express.json());
 app.use(cors());
-const path = require('path');
-const sessionStoreDir = '/tmp/sessions';
 
-if (!fs.existsSync(sessionStoreDir)) {
-    fs.mkdirSync(sessionStoreDir, { recursive: true });
-}
-
+// Use the default in-memory session store (no SQLite or file system needed)
 app.use(session({
-    store: new SQLiteStore({ db: '/tmp/sessions.db', dir: '/tmp' }),
     secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
     saveUninitialized: false,
