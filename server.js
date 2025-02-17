@@ -11,7 +11,7 @@ const PORT = 3000;
 app.use(express.json());
 app.use(cors());
 app.use(session({
-    store: new SQLiteStore({ db: 'sessions.db', dir: './data' }),
+    store: new SQLiteStore({ db: '/tmp/sessions.db', dir: '/tmp' }),
     secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
     saveUninitialized: false,
