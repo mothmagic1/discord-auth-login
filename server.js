@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 const cors = require('cors');
 require('dotenv').config();
 
@@ -10,9 +11,11 @@ const PORT = 3000;
 app.use(express.json());
 app.use(cors());
 app.use(session({
-    secret: 'your_secret_key',
+    store: new SQLiteStore({ db: 'sessions.db', dir: './data' }),
+    secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set to true if using HTTPS
 }));
 
 const CLIENT_ID = process.env.CLIENT_ID;
