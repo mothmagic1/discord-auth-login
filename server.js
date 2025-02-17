@@ -7,6 +7,14 @@ require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
+const fs = require('fs');
+fs.access('/tmp', fs.constants.W_OK, (err) => {
+    if (err) {
+        console.log("/tmp is not writable", err);
+    } else {
+        console.log("/tmp is writable");
+    }
+});
 
 app.use(express.json());
 app.use(cors());
