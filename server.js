@@ -18,13 +18,21 @@ fs.access('/tmp', fs.constants.W_OK, (err) => {
 
 app.use(express.json());
 app.use(cors());
+const path = require('path');
+const sessionStoreDir = '/tmp/sessions';
+
+if (!fs.existsSync(sessionStoreDir)) {
+    fs.mkdirSync(sessionStoreDir, { recursive: true });
+}
+
 app.use(session({
     store: new SQLiteStore({ db: '/tmp/sessions.db', dir: '/tmp' }),
     secret: process.env.SESSION_SECRET || 'your_secret_key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: false }
 }));
+
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
